@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" width="1200" height="240">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4285F4"/>
+      <stop offset="0.5" stop-color="#34A853"/>
+      <stop offset="1" stop-color="#EA4335"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="240" fill="url(#bg)"/>
+  <rect x="60" y="180" width="1080" height="6" rx="3" fill="url(#accent)"/>
+  <text x="60" y="110" font-family="Menlo, monospace" font-size="44" fill="#e2e8f0" font-weight="bold">dsh-gemini-multimodal</text>
+  <text x="60" y="152" font-family="Menlo, monospace" font-size="22" fill="#94a3b8">eyes and ears for DeepSeek Harness — image / audio / video / document understanding, transcription &amp; image generation via Gemini</text>
+</svg>

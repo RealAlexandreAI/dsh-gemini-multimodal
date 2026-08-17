@@ -1,0 +1,12 @@
+# Plugin bundle for dsh-gemini-multimodal.
+# Add this bundle to a profile to expose Gemini multimodal tools.
+# Configure the provider in the profile/settings layer:
+#
+#   - id: gemini-multimodal
+#     name: 'dsh-gemini-multimodal'
+#     config:
+#       provider: gemini_api          # or antigravity_cli
+#       api_key: <your gemini key>    # required for gemini_api
+- insert:
+    - id: gemini-multimodal
+      name: 'dsh-gemini-multimodal'

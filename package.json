@@ -1,0 +1,54 @@
+{
+  "name": "dsh-gemini-multimodal",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness plugin: multimodal tools (image/audio/video/document understanding, transcription, image generation) via Gemini API or the local Antigravity CLI.",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --import tsx --test tests/*.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "gemini",
+    "antigravity",
+    "multimodal",
+    "vision"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-tools": "^0.0.1-rc.1",
+    "@deepseek-ai/schemastery": "^3.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RealAlexandreAI/dsh-gemini-multimodal"
+  }
+}
