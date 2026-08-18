@@ -17,7 +17,8 @@ import { spawn } from 'child_process'
 export type ProviderName = 'gemini_api' | 'antigravity_cli'
 
 export interface ProviderOptions {
-  provider: ProviderName
+  /** Backend. Optional — defaults to antigravity_cli (zero-config). */
+  provider?: ProviderName
   /** API key — required only for `gemini_api`. */
   apiKey?: string
   /** Image generation model (default gemini-2.5-flash-image / Nano Banana). */
@@ -232,9 +233,15 @@ function runAgy(opts: ProviderOptions, prompt: string): Promise<ProviderResult> 
     const timer = setTimeout(() => child.kill('SIGTERM'), REQUEST_TIMEOUT_MS + 30_000)
     child.stdout?.on('data', (d) => (out += String(d)))
     child.stderr?.on('data', (d) => (err += String(d)))
-    child.on('error', (e) => {
+    child.on('error', () => {
       clearTimeout(timer)
-      resolve({ ok: false, error: `agy not available on PATH: ${e.message}` })
+      resolve({
+        ok: false,
+        error:
+          'agy not found on PATH. Install: curl -fsSL https://antigravity.google/cli/install.sh | bash, ' +
+          'then run `agy` once and sign in (no key needed). ' +
+          'Alternatively set provider: gemini_api + api_key (aistudio.google.com).',
+      })
     })
     child.on('close', (code) => {
       clearTimeout(timer)
@@ -276,9 +283,12 @@ async function agyGenerateImage(opts: ProviderOptions, prompt: string): Promise<
 export type MediaAction = 'understand' | 'transcribe' | 'read_document' | 'image_generate'
 
 export function runProvider(opts: ProviderOptions, action: MediaAction, arg: { source?: string; question?: string; prompt?: string }): Promise<ProviderResult> {
-  if (opts.provider === 'gemini_api') {
+  // No provider configured -> default to antigravity_cli so the plugin works
+  // with zero config (local agy, no key).
+  const provider = opts.provider ?? 'antigravity_cli'
+  if (provider === 'gemini_api') {
     if (!opts.apiKey) {
-      return Promise.resolve({ ok: false, error: 'api_key is required when provider is gemini_api (get one at aistudio.google.com)' })
+      return Promise.resolve({ ok: false, error: 'provider gemini_api needs api_key — get one at aistudio.google.com, or switch to antigravity_cli (local agy, no key).' })
     }
     switch (action) {
       case 'understand': return geminiUnderstand(opts, arg.source!, arg.question ?? '')

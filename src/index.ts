@@ -25,8 +25,9 @@ export const name = 'gemini-multimodal'
 export const inject = ['tools', 'systemPrompt']
 
 export interface Config {
-  /** Backend: `gemini_api` (REST + key) or `antigravity_cli` (local agy). */
-  provider: string
+  /** Backend: `gemini_api` (REST + key) or `antigravity_cli` (local agy).
+   *  Optional — defaults to antigravity_cli (zero-config: local agy, no key). */
+  provider?: string
   /** Gemini API key — required only when provider is gemini_api. */
   api_key?: string
   /** Image generation model (default gemini-2.5-flash-image). */
@@ -39,7 +40,7 @@ export interface Config {
 }
 
 export const Config: z<Config> = z.object({
-  provider: z.string().required().description('Backend: gemini_api (REST + key) or antigravity_cli (local agy)'),
+  provider: z.string().description('Backend: gemini_api (REST + key) or antigravity_cli (local agy). Default: antigravity_cli'),
   api_key: z.string().description('Gemini API key (aistudio.google.com). Required for gemini_api provider.'),
   image_model: z.string().description('Image generation model (default gemini-2.5-flash-image)'),
   output_dir: z.string().description('Directory for generated images (default OS temp)'),
@@ -56,10 +57,9 @@ const OUTPUT = {
 }
 
 export function apply(ctx: Context, config: Config): void {
-  const provider = config.provider
-  if (provider !== 'gemini_api' && provider !== 'antigravity_cli') {
-    throw new Error(`gemini-multimodal: provider must be 'gemini_api' or 'antigravity_cli', got ${JSON.stringify(provider)}`)
-  }
+  // Zero-config friendly: no provider configured -> tools default to
+  // antigravity_cli (local agy) and surface a setup hint on first call if the
+  // CLI is missing. Always loads, never throws on missing config.
 
   ctx.systemPrompt.section({
     name: 'tool:gemini-multimodal',
@@ -74,7 +74,7 @@ export function apply(ctx: Context, config: Config): void {
   const run = (action: MediaAction, arg: { source?: string; question?: string; prompt?: string }, exec: { signal?: AbortSignal }) =>
     runProvider(
       {
-        provider: config.provider as ProviderName,
+        provider: config.provider as ProviderName | undefined,
         apiKey: config.api_key,
         imageModel: config.image_model,
         outputDir: config.output_dir,

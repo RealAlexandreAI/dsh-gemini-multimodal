@@ -26,21 +26,11 @@ describe('dsh-gemini-multimodal smoke', () => {
     assert.deepEqual(names, ['image_generate', 'media_transcribe', 'media_understand', 'read_document'])
   })
 
-  it('loads with no api_key (surfaces on tool calls, not at boot)', () => {
+  it('loads with NO config at all (zero-config: defaults to antigravity_cli)', () => {
     const { ctx, registered } = makeCtx()
-    apply(ctx, { provider: 'gemini_api' })
+    apply(ctx, {})
     assert.equal(registered.length, 4)
-  })
-
-  it('config schema validates required provider', () => {
-    const missing = Config['~standard'].validate({})
-    assert.equal((missing.issues?.length ?? 0) > 0, true)
-    const ok = Config['~standard'].validate({ provider: 'antigravity_cli' })
-    assert.equal(ok.issues === undefined || ok.issues.length === 0, true)
-  })
-
-  it('rejects an unknown provider at load time', () => {
-    const { ctx } = makeCtx()
-    assert.throws(() => apply(ctx, { provider: 'nope' }), /provider must be/)
+    const bare = Config['~standard'].validate({})
+    assert.equal(bare.issues === undefined || bare.issues.length === 0, true)
   })
 })

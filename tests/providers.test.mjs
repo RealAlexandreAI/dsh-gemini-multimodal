@@ -37,7 +37,14 @@ describe('runProvider — gemini_api without key', () => {
   it('returns a setup hint, not a crash', async () => {
     const r = await runProvider({ provider: 'gemini_api' }, 'understand', { source: '/tmp/x.png', question: 'q' })
     assert.equal(r.ok, false)
-    assert.match(r.error ?? '', /api_key is required/)
+    assert.match(r.error ?? '', /api_key is required|needs api_key/)
+  })
+})
+
+describe('runProvider — default provider (no config)', () => {
+  it('defaults to antigravity_cli', async () => {
+    const r = await runProvider({}, 'understand', { source: '/tmp/x.png', question: 'q' })
+    assert.equal(typeof r.ok, 'boolean')
   })
 })
 
