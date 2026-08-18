@@ -29,13 +29,13 @@ DeepSeek models are text-only. When a task involves a screenshot, a chart, a voi
 dsh plugin --profile web add dsh-gemini-multimodal
 ```
 
-Configure in your profile/settings layer:
+Configure in your profile/settings layer (optional — **zero-config**: with no config at all it defaults to `antigravity_cli` and works if `agy` is installed):
 
 ```yaml
 - id: gemini-multimodal
   name: dsh-gemini-multimodal
   config:
-    provider: gemini_api        # or antigravity_cli
+    provider: gemini_api        # optional; default antigravity_cli
     api_key: <your gemini key>  # only for gemini_api
     # output_dir: /path/for/images   # generated images land here (default OS temp)
 ```

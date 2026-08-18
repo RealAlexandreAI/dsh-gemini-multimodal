@@ -23,13 +23,13 @@ DeepSeek 模型只支持文本。当任务涉及截图、图表、语音、视�
 dsh plugin --profile web add dsh-gemini-multimodal
 ```
 
-在 profile/settings 层配置:
+在 profile/settings 层配置(**可省略——零配置**默认走 `antigravity_cli`,本地装了 agy 就能直接用):
 
 ```yaml
 - id: gemini-multimodal
   name: dsh-gemini-multimodal
   config:
-    provider: gemini_api        # 或 antigravity_cli
+    provider: gemini_api        # 可省略;默认 antigravity_cli
     api_key: <你的 gemini key>  # 仅 gemini_api 需要
     # output_dir: /图片输出目录  # 生成图存放处(默认系统临时目录)
 ```
